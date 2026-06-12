@@ -7,7 +7,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-import { TEXT_MAX_LENGTH } from "@/features/text-to-speech/data/constants";
+import { 
+    TEXT_MAX_LENGTH,
+    COST_PER_UNIT
+  } from "@/features/text-to-speech/data/constants";
 
 export function TextInputPanel() {
     const [text, setText] = useState("");
@@ -22,9 +25,9 @@ export function TextInputPanel() {
 
     return (
         <div className="
-        rounded-[22px] bg-linear-185 from-[#ff8cc3] from-15% via-[#57d7c0] via-39% to=[#dbff1f2] to-85% p-0.5 shadow-[0_0_0_4px_white]
+        rounded-[22px] bg-linear-185 from-[#ff8cc3] from-15% via-[#57d7c0] via-39% to-[#dbf1f2] to-85% p-0.5 shadow-[0_0_0_4px_white]
         ">
-            <div className="rounded-[20px] bg-[f9f9f9] p-1">
+            <div className="rounded-[20px] bg-[#f9f9f9] p-1">
                 <div className="space-y-4 rounded-2xl bg-white p-4 drop-shadow-xs">
                     <Textarea
                         placeholder="Start typing or paste your text here..."
@@ -41,11 +44,11 @@ export function TextInputPanel() {
                             <Coins className="size-3 text-chart-5" />
                             <span className="text-xs">
                                 {text.length === 0 ? (
-                                 "Start typing to estimat"   
+                                 "Start typing to estimate"
                                 ) : (
                                   <>
                                   <span className="tabular-nums">
-                                    ${(text.length * 0.0003).toFixed(4)}
+                                    ${(text.length * COST_PER_UNIT).toFixed(4)}
                                   </span>{" "}
                                   estimated
                                   </>  

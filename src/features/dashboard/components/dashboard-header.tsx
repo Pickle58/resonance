@@ -20,7 +20,7 @@ export function DashboardHeader() {
         </h1>
       </div>
 
-      <div className="lg:flex items-center gap-3 hidden">
+      <div className="hidden lg:flex items-center gap-3">
         <Button variant="outline" size="sm" asChild>
           <Link href="mailto:business@codewithantonio.com">
             <ThumbsUp />
