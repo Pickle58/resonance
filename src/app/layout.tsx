@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { TRPCProvider, TRPCReactProvider } from "@/trpc/client";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -33,7 +34,9 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <ClerkProvider>
-          {children}
+          <TRPCReactProvider>
+            {children}
+          </TRPCReactProvider>
           <Toaster />
         </ClerkProvider>
       </body>
