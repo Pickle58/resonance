@@ -16,6 +16,7 @@ import {
     ttsFormOptions,
     type TTSFormValues,
 } from "@/features/text-to-speech/components/text-to-speech-form";
+import { VoiceSelector } from "./voice-selector";
 
 type SliderFieldName = keyof Pick<
     TTSFormValues,
@@ -38,9 +39,7 @@ export function SettingsPanelSettings() {
        <>
        {/* Voice Style Dropdown Section */}
        <div className="border-b border-dashed p-4">
-            <p className="tezt-sm text-muted-foreground">
-                Voice selector coming soon
-            </p>
+          <VoiceSelector />  
        </div>
 
        {/* Voice Adjustments Section */}
