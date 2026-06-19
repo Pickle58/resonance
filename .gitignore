@@ -44,4 +44,4 @@ next-env.d.ts
 
 /scripts/system-voices
 
-_pycache_
+__pycache__/

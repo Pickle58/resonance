@@ -15,7 +15,7 @@ import { fileURLToPath } from "node:url";
 import dotenv from "dotenv";
 
 dotenv.config();
-dotenv.config({ path: ".env.local", override: true });
+dotenv.config({ path: ".env.local" });
 import openapiTS, { astToString } from "openapi-typescript";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
