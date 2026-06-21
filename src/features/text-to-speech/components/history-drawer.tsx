@@ -25,7 +25,7 @@ export function HistoryDrawer() {
         <DrawerHeader>
           <DrawerTitle>History</DrawerTitle>
         </DrawerHeader>
-        <div className="overflow-y-auto">
+        <div className="flex-1 overflow-y-auto">
           <SettingsPanelHistory />
         </div>
       </DrawerContent>

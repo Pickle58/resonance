@@ -1,5 +1,6 @@
 import { auth } from '@clerk/nextjs/server';
 import { TRPCError, initTRPC } from '@trpc/server';
+import * as Sentry from '@sentry/nextjs';
 import superjson from 'superjson';
 
 /**
@@ -30,7 +31,14 @@ const t = initTRPC.create({
 // Base router and procedure helpers
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
-export const baseProcedure = t.procedure;
+
+const sentryMiddleware = t.middleware(
+  Sentry.trpcMiddleware({
+    attachRpcInput: true,
+  }),
+);
+
+export const baseProcedure = t.procedure.use(sentryMiddleware);
 
 // Authenticated procedure - calls auth() only when needed
 export const authProcedure = baseProcedure.use(async ({ next }) => {
@@ -39,6 +47,9 @@ export const authProcedure = baseProcedure.use(async ({ next }) => {
   if (!userId) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
+
+  Sentry.getIsolationScope().setAttributes({ user_id: userId });
+  Sentry.setUser({ id: userId });
 
   return next({
     ctx: { userId },
@@ -59,6 +70,12 @@ export const orgProcedure = baseProcedure.use(async ({ next }) => {
       message: "Organization required",
     });
   }
+
+  Sentry.getIsolationScope().setAttributes({
+    user_id: userId,
+    org_id: orgId,
+  });
+  Sentry.setUser({ id: userId });
 
   return next({ ctx: { userId, orgId } });
 });
