@@ -21,8 +21,8 @@ export function VoiceSelectorButton() {
     (state: AnyFormState) => state.values.voiceId,
   );
   
-  const currentVoice = 
-    allVoices.find((v) => v.id === voiceId) ?? allVoices[0];
+  const currentVoice =
+    allVoices.find((v) => v.id === voiceId) ?? undefined;
 
   const buttonLabel = currentVoice?.name ?? "Select voice";
 
