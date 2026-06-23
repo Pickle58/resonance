@@ -1,9 +1,10 @@
-import {ClerkProvider} from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "@/components/ui/sonner";
-import { TRPCProvider, TRPCReactProvider } from "@/trpc/client";
+import { ClerkProvider } from "@clerk/nextjs";
+import { TRPCReactProvider } from "@/trpc/client";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -14,12 +15,13 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
 export const metadata: Metadata = {
   title: {
-    template: "%s | Resonance",
     default: "Resonance",
+    template: "%s | Resonance"
   },
-  description: "Resonance is an AI-powered platform for text to speech conversion",
+  description: "AI-powered text-to-speech and voice cloning platform",
 };
 
 export default function RootLayout({
@@ -28,18 +30,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${inter.variable} ${geistMono.variable} font-sans antialiased h-full`}
-    >
-      <body className="min-h-full flex flex-col">
-        <ClerkProvider>
-          <TRPCReactProvider>
-            {children}
-          </TRPCReactProvider>
-          <Toaster />
-        </ClerkProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <TRPCReactProvider>
+        <html lang="en">
+          <body
+            className={`${inter.variable} ${geistMono.variable} antialiased`}
+          >
+            <NuqsAdapter>
+              {children}
+            </NuqsAdapter>
+            <Toaster />
+          </body>
+        </html>
+      </TRPCReactProvider>
+    </ClerkProvider>
   );
 }
