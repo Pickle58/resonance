@@ -2,8 +2,10 @@
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -66,14 +68,24 @@ export function VoiceCreateDialog({
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
           {children && <DialogTrigger asChild>{children}</DialogTrigger>}
-          <DialogContent>
+          <DialogContent className="flex max-h-[90vh] flex-col">
             <DialogHeader className="text-left">
               <DialogTitle>Create custom voice</DialogTitle>
               <DialogDescription>
                 Upload or record an audio sample to add a new voice to your library.
               </DialogDescription>
             </DialogHeader>
-            <VoiceCreateForm />
+            <VoiceCreateForm
+              scrollable
+              footer={(submit) => (
+                <DialogFooter>
+                  {submit}
+                  <DialogClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DialogClose>
+                </DialogFooter>
+              )}
+            />
           </DialogContent>
         </Dialog>
     );
