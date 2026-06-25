@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -56,12 +57,15 @@ function UsageCard({
     trpc.billing.createPortalSession.mutationOptions({}),
   );
 
-  const openPortal = useCallback(() => {
-    portalMutation.mutate(undefined, {
-      onSuccess: (data) => {
-        window.open(data.portalUrl, "_blank");
-      },
-    });
+  const openPortal = useCallback(async () => {
+    try {
+      const data = await portalMutation.mutateAsync(undefined);
+      window.open(data.portalUrl, "_blank");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to open customer portal",
+      );
+    }
   }, [portalMutation]);
 
   return (
