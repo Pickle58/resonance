@@ -28,7 +28,7 @@ function VoicesContent() {
 
 export function VoicesView() {
     return (
-        <div className="flex-1 space-y-10 overflow-y-auto p-3 Lg:p-6">
+        <div className="flex-1 space-y-10 overflow-y-auto p-3 lg:p-6">
             <VoicesToolbar />
             <VoicesContent />
         </div>
