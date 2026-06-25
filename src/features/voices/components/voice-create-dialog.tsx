@@ -19,6 +19,8 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { VoiceCreateForm } from "./voice-create-form";
+import { Button } from "@/components/ui/button";
 
 interface VoiceCreateDialogProps {
     children?: React.ReactNode;
@@ -45,9 +47,8 @@ export function VoiceCreateDialog({
                   library.
                 </DrawerDescription>
               </DrawerHeader>
-              {/* <VoiceCreateForm
+              <VoiceCreateForm
                 scrollable
-                onError={handleError}
                 footer={(submit) => (
                   <DrawerFooter>
                     {submit}
@@ -56,24 +57,24 @@ export function VoiceCreateDialog({
                     </DrawerClose>
                   </DrawerFooter>
                 )}
-              /> */}
+              />
             </DrawerContent>
           </Drawer>
         );
+    }
 
-        return (
-            <Dialog open={open} onOpenChange={onOpenChange}>
-              {children && <DialogTrigger asChild>{children}</DialogTrigger>}
-              <DialogContent>
-                <DialogHeader className="text-left">
-                  <DialogTitle>Create custom voice</DialogTitle>
-                  <DialogDescription>
-                    Upload or record an audio sample to add a new voice to your library.
-                  </DialogDescription>
-                </DialogHeader>
-                {/* <VoiceCreateForm onError={handleError} /> */}
-              </DialogContent>
-            </Dialog>
-          );
-      };
-};
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+          {children && <DialogTrigger asChild>{children}</DialogTrigger>}
+          <DialogContent>
+            <DialogHeader className="text-left">
+              <DialogTitle>Create custom voice</DialogTitle>
+              <DialogDescription>
+                Upload or record an audio sample to add a new voice to your library.
+              </DialogDescription>
+            </DialogHeader>
+            <VoiceCreateForm />
+          </DialogContent>
+        </Dialog>
+    );
+}
