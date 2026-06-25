@@ -4,7 +4,7 @@ import { polar } from "@/lib/polar";
 import { TRPCError } from "@trpc/server";
 import { chatterbox } from "@/lib/chatterbox-client";
 import { prisma } from "@/lib/db";
-import { uploadAudio } from "@/lib/r2";
+import { uploadAudio, deleteAudio } from "@/lib/r2";
 import { TEXT_MAX_LENGTH } from "@/features/text-to-speech/data/constants";
 import { createTRPCRouter, orgProcedure } from "../init";
 
@@ -181,6 +181,9 @@ export const generationsRouter = createTRPCRouter({
         });
 
       } catch (error) {
+        if (r2ObjectKey) {
+          await deleteAudio(r2ObjectKey).catch(() => { });
+        }
         if (generationId) {
           await prisma.generation
             .delete({

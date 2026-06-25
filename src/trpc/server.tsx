@@ -5,7 +5,7 @@ import { headers } from 'next/headers';
 import { cache } from 'react';
 import { createTRPCContext } from './init';
 import { makeQueryClient } from './query-client';
-import { appRouter, type AppRouter } from './routers/_app';
+import { appRouter } from './routers/_app';
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
  
 // IMPORTANT: Create a stable getter for the query client that
@@ -36,7 +36,7 @@ export function HydrateClient(props: { children: React.ReactNode }) {
     );
   }
 
-  export function prefetch<T extends ReturnType<TRPCQueryOptions<AppRouter>>>(
+  export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
     queryOptions: T,
   ) {
     const queryClient = getQueryClient();
