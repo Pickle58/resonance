@@ -1,9 +1,10 @@
+import { ResourceNotFound } from "@polar-sh/sdk/models/errors/resourcenotfound";
 import { auth } from "@clerk/nextjs/server";
 import { parseBuffer } from "music-metadata";
 import { z } from "zod";
 import { polar } from "@/lib/polar";
 import { prisma } from "@/lib/db";
-import { uploadAudio } from "@/lib/r2";
+import { uploadAudio, deleteAudio } from "@/lib/r2";
 import { VOICE_CATEGORIES } from "@/features/voices/data/voice-categories";
 import type { VoiceCategory } from "@/generated/prisma/client";
 
@@ -34,9 +35,16 @@ export async function POST(req: Request) {
     if (!hasActiveSubscription) {
       return Response.json({ error: "SUBSCRIPTION_REQUIRED" }, { status: 403 });
     }
-  } catch {
-    // Customer doesn't exist in Polar yet -> no subscription
-    return Response.json({ error: "SUBSCRIPTION_REQUIRED" }, { status: 403 });
+  } catch (err) {
+    if (err instanceof ResourceNotFound) {
+      // Customer doesn't exist in Polar yet -> no subscription
+      return Response.json({ error: "SUBSCRIPTION_REQUIRED" }, { status: 403 });
+    }
+    console.error("Failed to check subscription state", { orgId, error: err });
+    return Response.json(
+      { error: "Failed to verify subscription. Please try again." },
+      { status: 500 },
+    );
   }
 
   const url = new URL(req.url);
@@ -116,6 +124,7 @@ export async function POST(req: Request) {
   }
 
   let createdVoiceId: string | null = null;
+  let uploadedR2ObjectKey: string | null = null;
 
   try {
     const voice = await prisma.voice.create({
@@ -140,6 +149,7 @@ export async function POST(req: Request) {
       key: r2ObjectKey,
       contentType: normalizedContentType,
     });
+    uploadedR2ObjectKey = r2ObjectKey;
 
     await prisma.voice.update({
       where: {
@@ -150,6 +160,9 @@ export async function POST(req: Request) {
       },
     });
   } catch {
+    if (uploadedR2ObjectKey) {
+      await deleteAudio(uploadedR2ObjectKey).catch(() => { });
+    }
     if (createdVoiceId) {
       await prisma.voice
         .delete({

@@ -38,7 +38,11 @@ export const WavyBackground = ({
   const noise = useMemo(() => createNoise3D(), []);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationIdRef = useRef(0);
-  const [isSafari] = useState(detectSafari);
+  const [isSafari, setIsSafari] = useState(false);
+
+  useEffect(() => {
+    setIsSafari(detectSafari());
+  }, []);
 
   const waveColors = useMemo(
     () =>

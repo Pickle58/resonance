@@ -1,3 +1,4 @@
+import { ResourceNotFound } from "@polar-sh/sdk/models/errors/resourcenotfound";
 import { TRPCError } from "@trpc/server";
 import { polar } from "@/lib/polar";
 import { env } from "@/lib/env";
@@ -58,13 +59,20 @@ export const billingRouter = createTRPCRouter({
         customerId: customerState.id,
         estimatedCostCents,
       };
-    } catch {
-      // Customer doesn't exist yet in Polar
-      return {
-        hasActiveSubscription: false,
-        customerId: null,
-        estimatedCostCents: 0,
-      };
+    } catch (err) {
+      if (err instanceof ResourceNotFound) {
+        // Customer doesn't exist yet in Polar
+        return {
+          hasActiveSubscription: false,
+          customerId: null,
+          estimatedCostCents: 0,
+        };
+      }
+      console.error("Failed to fetch billing status", { orgId: ctx.orgId, error: err });
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: "Failed to fetch billing status",
+      });
     }
   }),
 });

@@ -204,7 +204,7 @@ export function DashboardSidebar() {
                                 showName
                                 fallback={
                                     <Skeleton
-                                        className="h-8.5 w-full group-data-[collapsible=icon]:size-8 rounded-md border border-borderbg-white"
+                                        className="h-8.5 w-full group-data-[collapsible=icon]:size-8 rounded-md border border-border bg-white"
                                     />
                                 }
                                 appearance={{
