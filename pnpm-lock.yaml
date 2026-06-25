@@ -26,6 +26,9 @@ importers:
       '@dicebear/styles':
         specifier: ^10.2.0
         version: 10.2.0
+      '@polar-sh/sdk':
+        specifier: ^0.48.1
+        version: 0.48.1
       '@prisma/adapter-pg':
         specifier: ^7.8.0
         version: 7.8.0
@@ -1170,6 +1173,9 @@ packages:
   '@opentelemetry/semantic-conventions@1.41.1':
     resolution: {integrity: sha512-/UhIkaZgPutTFmQ7RnIJGgDXZmtEJ7Dvi86xNTFWcnRxVRNk/aotsqDJYeEvDP+FSMB2SdW+pQzNMcWP0rwuNA==}
     engines: {node: '>=14'}
+
+  '@polar-sh/sdk@0.48.1':
+    resolution: {integrity: sha512-FmU6eLJRXJ6Zau0IkqscfkFta8xxYbFV1VD9zzS2Ki2btCuFmUyPZOkHOXU77R892h2zyBegLnHS7jrOhMN1Sw==}
 
   '@prisma/adapter-pg@7.8.0':
     resolution: {integrity: sha512-ygb3UkerK3v8MDpXVgCISdRNDozpxh6+JVJgiIGbSr5KBgz10LLf5ejUskPGoXlsIjxsOu6nuy1JVQr2EKGSlg==}
@@ -6887,6 +6893,11 @@ snapshots:
       '@opentelemetry/semantic-conventions': 1.41.1
 
   '@opentelemetry/semantic-conventions@1.41.1': {}
+
+  '@polar-sh/sdk@0.48.1':
+    dependencies:
+      standardwebhooks: 1.0.0
+      zod: 4.4.3
 
   '@prisma/adapter-pg@7.8.0':
     dependencies:

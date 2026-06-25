@@ -5,7 +5,7 @@ import { headers } from 'next/headers';
 import { cache } from 'react';
 import { createTRPCContext } from './init';
 import { makeQueryClient } from './query-client';
-import { appRouter } from './routers/_app';
+import { appRouter, type AppRouter } from './routers/_app';
 import { HydrationBoundary, dehydrate } from '@tanstack/react-query';
  
 // IMPORTANT: Create a stable getter for the query client that
@@ -36,12 +36,14 @@ export function HydrateClient(props: { children: React.ReactNode }) {
     );
   }
 
-  export function prefetch<T extends ReturnType<TRPCQueryOptions<any>>>(
+  export function prefetch<T extends ReturnType<TRPCQueryOptions<AppRouter>>>(
     queryOptions: T,
   ) {
     const queryClient = getQueryClient();
     if (queryOptions.queryKey[1]?.type === 'infinite') {
-      void queryClient.prefetchInfiniteQuery(queryOptions as any);
+      void queryClient.prefetchInfiniteQuery(
+        queryOptions as Parameters<typeof queryClient.prefetchInfiniteQuery>[0],
+      );
     } else {
       void queryClient.prefetchQuery(queryOptions);
     }
