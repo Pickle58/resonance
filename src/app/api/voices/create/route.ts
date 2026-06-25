@@ -3,7 +3,7 @@ import { parseBuffer } from "music-metadata";
 import { z } from "zod";
 //import { polar } from "@/lib/polar";
 import { prisma } from "@/lib/db";
-import { uploadAudio } from "@/lib/r2";
+import { deleteAudio, uploadAudio } from "@/lib/r2";
 import { VOICE_CATEGORIES } from "@/features/voices/data/voice-categories";
 import type { VoiceCategory } from "@/generated/prisma/client";
 
@@ -101,6 +101,7 @@ export async function POST(req: Request) {
       }
 
       let createdVoiceId: string | null = null;
+      let r2ObjectKey: string | null = null;
 
       try {
         const voice = await prisma.voice.create({
@@ -118,7 +119,7 @@ export async function POST(req: Request) {
         });
     
         createdVoiceId = voice.id;
-        const r2ObjectKey = `voices/orgs/${orgId}/${voice.id}`;
+        r2ObjectKey = `voices/orgs/${orgId}/${voice.id}`;
 
         await uploadAudio({
             buffer: Buffer.from(fileBuffer),
@@ -135,6 +136,9 @@ export async function POST(req: Request) {
             },
           });
         } catch {
+          if (r2ObjectKey) {
+            await deleteAudio(r2ObjectKey).catch(() => {});
+          }
           if (createdVoiceId) {
             await prisma.voice
               .delete({
